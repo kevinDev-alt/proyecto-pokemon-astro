@@ -1,17 +1,23 @@
 ---
-
+import { url } from 'astro:schema';
+import PokemonCard from '../components/pokemons/PokemonCard.astro';
+import type { PokemonListResponse } from '../interfaces/pokemon-list.response';
+import MainLayout from '../Layouts/MainLayout.astro';
+import '../styles/global.css';
+const resp = await fetch('https://pokeapi.co/api/v2/pokemon/');
+const data = (await resp.json() as PokemonListResponse);
 ---
+<MainLayout title="Pokemon | Home">
+		<h1 class="text-3xl">Listado de Pokémons</h1>
+		<hr/><br>
+		<section aria-label="Listado de Pokemons"
+		class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-4 mt-5">
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+		{data.results.map(({url, name}) => (
+		<PokemonCard
+		url= {url}
+		name= {name}/>
+		)) } 
+
+		</section>
+</MainLayout>
